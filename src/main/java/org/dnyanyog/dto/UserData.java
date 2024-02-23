@@ -8,10 +8,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Component
 public class UserData {
 	
+	private long userId;
 	private String username;
 	private String password;
 	private String email;
 	private String age;
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 
 	public String getUsername() {
 		return username;

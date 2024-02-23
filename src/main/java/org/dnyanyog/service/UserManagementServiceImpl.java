@@ -27,34 +27,38 @@ public class UserManagementServiceImpl implements UserManagementService  {
 	@Autowired
 	private List<Long> userIds;
 	
+	@Autowired
+	EncryptionService encryptionService;
+	
 	@Override
-	public Optional<AddUserResponse> addUpdateUser(AddUserRequest request) {
+	public Optional<AddUserResponse> addUpdateUser(AddUserRequest request) throws Exception {
 
 		Users usersTable = Users.getInstance()
+				.setUserId(request.getUserId())
 				.setAge(request.getAge())
 				.setEmail(request.getEmail())
-				.setPassword(request.getPassword())
+				.setPassword(encryptionService.encrypt(request.getPassword()))
 				.setUsername(request.getUsername());
 
 		usersTable = userRepo.save(usersTable); 
 		
 		userResponse.setMessage("User added successfuly"); 
 		userResponse.setStatus("Success");
-		userResponse.setUserId(usersTable.getUserId()); 
+		userResponse.getUserData().setUserId(usersTable.getUserId()); 
 		userResponse.setStatus("Success");
 		userResponse.setMessage("User found");
-		userResponse.setUserId(usersTable.getUserId());
+		
 		
 		userResponse.getUserData().setEmail(usersTable.getEmail());
 		userResponse.getUserData().setUsername(usersTable.getUsername());
-		userResponse.getUserData().setPassword(usersTable.getPassword());
+		userResponse.getUserData().setPassword(encryptionService.decrypt(usersTable.getPassword()));
 		userResponse.getUserData().setAge(usersTable.getAge());
 
 		return Optional.of(userResponse);
 	}
 	
 	@Override
-	public AddUserResponse getSingleUser(Long userId) {
+	public AddUserResponse getSingleUser(Long userId) throws Exception {
 
 		Optional<Users> receivedData = userRepo.findById(userId);
 
@@ -66,10 +70,10 @@ public class UserManagementServiceImpl implements UserManagementService  {
 					
 			userResponse.setStatus("Success");
 			userResponse.setMessage("User found");
-			userResponse.setUserId(user.getUserId());
+			userResponse.getUserData().setUserId(user.getUserId());
 			userResponse.getUserData().setEmail(user.getEmail());
 			userResponse.getUserData().setUsername(user.getUsername());
-			userResponse.getUserData().setPassword(user.getPassword());
+			userResponse.getUserData().setPassword(encryptionService.decrypt(user.getPassword()));
 			userResponse.getUserData().setAge(user.getAge());
 		}
 		return userResponse;

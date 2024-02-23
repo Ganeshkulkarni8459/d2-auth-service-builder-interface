@@ -9,9 +9,9 @@ import org.dnyanyog.entity.Users;
 
 public interface UserManagementService {
 	
-	public Optional<AddUserResponse> addUpdateUser(AddUserRequest request);
+	public Optional<AddUserResponse> addUpdateUser(AddUserRequest request) throws Exception;
 	
-	public AddUserResponse getSingleUser(Long userId);
+	public AddUserResponse getSingleUser(Long userId) throws Exception;
 	
 	public List<Users> getAllUser();
 	

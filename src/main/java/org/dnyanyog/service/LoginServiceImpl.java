@@ -17,17 +17,28 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	LoginResponse response;
+	
+	@Autowired
+	EncryptionService encryptionService;
 
-	public LoginResponse validateUser(LoginRequest loginRequest) {
+	public LoginResponse validateUser(LoginRequest loginRequest) throws Exception {
 
-		List<Users> liUser = userRepo.findByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
+		List<Users> liUser = userRepo.findByUsername(loginRequest.getUsername());
 
 		if (liUser.size() == 1) {
-			response.setStatus("Success");
-			response.setMessage("Login successful");
-		} else {
-			response.setStatus("Fail");
-			response.setMessage("Login failed");
+			
+			Users userData = liUser.get(0);
+			
+			String encryptedPassword = userData.getPassword();	
+			String getEncryptedPassword = encryptionService.encrypt(loginRequest.getPassword());
+			
+			if(getEncryptedPassword.equalsIgnoreCase(encryptedPassword)) {
+				response.setStatus("Success");
+				response.setMessage("Login successful");
+			} else {
+				response.setStatus("Fail");
+				response.setMessage("Login failed");
+			}
 		}
 		return response;
 	}

@@ -18,7 +18,7 @@ public class LoginController {
 			path="/api/v1/public/auth/validate",
 			consumes = {"application/json","application/xml"}, 
 			produces= {"application/json","application/xml"})
-	public LoginResponse validate(@RequestBody LoginRequest loginRequest)
+	public LoginResponse validate(@RequestBody LoginRequest loginRequest) throws Exception
 	{
 		return loginService.validateUser(loginRequest);
 	}

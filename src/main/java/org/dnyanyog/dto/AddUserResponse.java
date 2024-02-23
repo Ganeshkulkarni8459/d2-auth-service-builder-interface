@@ -11,7 +11,7 @@ public class AddUserResponse {
 
 	private String status;
 	private String message;
-	private long userId;
+
 
 	@Autowired
 	public UserData userData;
@@ -22,14 +22,6 @@ public class AddUserResponse {
 
 	public void setUserData(UserData userData) {
 		this.userData = userData;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getStatus() {
